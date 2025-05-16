@@ -9,7 +9,7 @@ LambdaBench helps you evaluate the **cold start latency** of AWS Lambda function
 
 A **cold start** occurs when your Lambda function is invoked after being idle for a while. AWS spins up a new container which takes longer than a **warm** start (an already running instance). Cold starts impact latency, especially in latency-sensitive apps.
 
----
+
 
 ## Inputs
 
