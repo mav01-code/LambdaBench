@@ -32,7 +32,7 @@ After benchmarking, LambdaBench provides:
 
 - **Cold Start Time (ms)**: Time taken to execute the function after the idle period
 - **Visualizations**:
-  - Graphs for cold start duration vs memory
+  - Graphs for cold start duration vs memory - using Chart.js
   - Comparisons by runtime and region
 
 
