@@ -22,6 +22,7 @@ const BenchmarkForm = () => {
   });
 
   const [graphData, setGraphData] = useState(null);
+  const [rawData, setRawData] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,17 +44,13 @@ const BenchmarkForm = () => {
 
       const result = await res.json();
 
-      if (result.visualize && result.data && result.data.length > 0) {
-        // Parse 'coldStartTime' string like '156.19 ms' into float
-        const parsed = result.data.map(d => ({
-          ...d,
-          avgColdStartTime: parseFloat(d.coldStartTime),
-        }));
-        setGraphData(parsed);
+      if (result.visualize && result.graphData) {
+        setGraphData(result.graphData);
       } else {
         setGraphData(null);
-        console.log("Benchmark result:", result.data);
       }
+
+      setRawData(result.data || []);
     } catch (err) {
       console.error("Error running benchmark:", err);
     }
@@ -135,6 +132,51 @@ const BenchmarkForm = () => {
         <div style={{ marginTop: "2rem" }}>
           <h3>Visualization</h3>
           <Bar data={chartData} />
+        </div>
+      )}
+
+      {rawData && formData.outputFormat === "Table" && (
+        <div style={{ marginTop: "2rem" }}>
+          <h3>Benchmark Table</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Runtime</th>
+                <th>Memory</th>
+                <th>Region</th>
+                <th>Cold Start Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rawData.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.runtime}</td>
+                  <td>{item.memory} MB</td>
+                  <td>{item.region}</td>
+                  <td>{item.coldStartTime}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {rawData && formData.outputFormat === "JSON" && (
+        <pre style={{ marginTop: "2rem", backgroundColor: "#f4f4f4", padding: "1rem" }}>
+          {JSON.stringify(rawData, null, 2)}
+        </pre>
+      )}
+
+      {rawData && formData.outputFormat === "CSV" && (
+        <div style={{ marginTop: "2rem" }}>
+          <h3>CSV Output</h3>
+          <pre>
+            Runtime,Memory,Region,Cold Start Time
+            {"\n"}
+            {rawData.map(
+              (item) => `${item.runtime},${item.memory},${item.region},${item.coldStartTime}`
+            ).join("\n")}
+          </pre>
         </div>
       )}
     </div>

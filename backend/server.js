@@ -14,12 +14,11 @@ app.post("/api/benchmark", async (req, res) => {
   const runtimesArr = runtimes.split(",").map((r) => r.trim());
   const memorySizesArr = memorySizes.split(",").map((m) => parseInt(m.trim(), 10));
 
-  // Simulate benchmark results
   const benchmarkResults = [];
 
   for (const runtime of runtimesArr) {
     for (const memory of memorySizesArr) {
-      const coldStartTime = (Math.random() * 300 + 50).toFixed(2); // e.g. "173.39"
+      const coldStartTime = (Math.random() * 300 + 50).toFixed(2);
       benchmarkResults.push({
         runtime,
         memory,
@@ -29,27 +28,21 @@ app.post("/api/benchmark", async (req, res) => {
     }
   }
 
-  // If visualization is requested, return cleaned-up data
-  if (visualize) {
-    const graphData = benchmarkResults.map((result) => ({
-      runtime: result.runtime,
-      memory: result.memory,
-      avgColdStartTime: parseFloat(result.coldStartTime.replace(" ms", "")), // remove 'ms'
-    }));
-
-    return res.json({
-      format: outputFormat,
-      visualize: true,
-      graphData,
-    });
-  }
-
-  // Otherwise, return raw benchmark data
-  res.json({
+  const response = {
     data: benchmarkResults,
     format: outputFormat,
-    visualize: false,
-  });
+    visualize: visualize,
+  };
+
+  if (visualize) {
+    response.graphData = benchmarkResults.map((result) => ({
+      runtime: result.runtime,
+      memory: result.memory,
+      avgColdStartTime: parseFloat(result.coldStartTime.replace(" ms", "")),
+    }));
+  }
+
+  res.json(response);
 });
 
 app.listen(PORT, () => {
