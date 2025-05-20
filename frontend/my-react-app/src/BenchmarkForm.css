@@ -75,3 +75,44 @@ button.run-btn:hover {
 }
  /* BenchmarkForm.css */
 
+
+ /* BenchmarkForm.css */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #4c7daf; /* fresh green vibe */
+  color: white;
+  text-align: left;
+}
+
+thead th {
+  padding: 12px 15px;
+}
+
+tbody tr {
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+tbody tr:hover {
+  background-color: #f1f8e9; /* subtle light green highlight on hover */
+}
+
+tbody td {
+  padding: 12px 15px;
+  color: #333;
+}
+
+h3 {
+  color: #333;
+  font-weight: 600;
+}
