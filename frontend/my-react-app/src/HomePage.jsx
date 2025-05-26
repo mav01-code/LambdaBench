@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useRef } from "react";
 import './HomePage.css';
 import { useNavigate } from "react-router-dom";
 import logo from "./assets/logo.png"; // ✅ Make sure logo is in src/assets/
 
 function HomePage() {
   const navigate = useNavigate();
+  const aboutRef = useRef(null); // 👈 Ref for the about section
+
+  const scrollToAbout = () => {
+    aboutRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", maxWidth: 900, margin: "0 auto", padding: "2rem" }}>
@@ -14,12 +19,11 @@ function HomePage() {
           <h1 style={{ color: "#2c3e50", fontSize: "1.5rem" }}>Benchmark Your AWS Lambda Functions</h1>
         </div>
         <nav>
-          <button style={buttonStyle}>Login</button>
           <button
             style={{ ...buttonStyle, backgroundColor: "#27ae60", marginLeft: "1rem" }}
-            onClick={() => navigate("/get-started")}
+            onClick={scrollToAbout}
           >
-            Get Started Free
+            About
           </button>
         </nav>
       </header>
@@ -37,14 +41,14 @@ function HomePage() {
         </button>
       </section>
 
-      <section style={{ backgroundColor: "#ecf0f1", padding: "2rem", borderRadius: 8 }}>
+      <section ref={aboutRef} style={{ backgroundColor: "#ecf0f1", padding: "2rem", borderRadius: 8 }}>
         <div className="about-section">
           <div className="about-card">
             <h3>About LambdaBench</h3>
-            <p>
-              LambdaBench is a powerful tool designed to help developers and DevOps teams analyze and optimize AWS Lambda functions.
-              By testing different runtimes, memory configurations, and invocation patterns, LambdaBench provides actionable insights
-              to reduce cold start delays and improve your application's responsiveness.
+              <p>
+  LambdaBench is your go-to toolkit for leveling up serverless performance. Built for developers, engineers, and tech teams who want real insights — not guesswork — LambdaBench lets you test, compare, and optimize AWS Lambda functions across runtimes and memory sizes.
+  <br /><br />
+  But that’s just the beginning. Our mission is to launch a fully open-source benchmarking framework that can automatically analyze and characterize workloads on AWS Lambda — so you can stop firefighting and start building smarter. Whether you're optimizing cold starts or choosing the best runtime, LambdaBench turns data into clarity.
             </p>
           </div>
         </div>
