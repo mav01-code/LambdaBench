@@ -128,6 +128,31 @@ h3 {
   margin-top: 2rem;
 }
 
+.button-wrapper button {
+  background: #4caf50;          /* chill green */
+  color: white;                 /* white text pop */
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;           /* smooth rounded corners */
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  /* box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3); */
+}
+
+.button-wrapper button:hover {
+  background: #45a049;          /* slightly darker green on hover */
+  transform: scale(1.05);       /* subtle pop */
+  /* box-shadow: 0 6px 12px rgba(69, 160, 73, 0.4); */
+}
+
+.button-wrapper button:focus {
+  outline: none;
+  /* box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.6); */
+}
+
+
 /* Animations */
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(20px); }

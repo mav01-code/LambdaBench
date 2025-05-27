@@ -34,34 +34,36 @@ const BenchmarkForm = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!formData.runtimes.trim() || !formData.memorySizes.trim() || !formData.region.trim()) {
-      alert("Please fill out runtimes, memory sizes, and region fields.");
-      return;
+  if (!formData.runtimes.trim() || !formData.memorySizes.trim() || !formData.region.trim()) {
+    alert("Please fill out runtimes, memory sizes, and region fields.");
+    return;
+  }
+
+  console.log("Submitting formData:", formData);  // <-- Add this here
+
+  try {
+    const res = await fetch("http://localhost:5000/api/benchmark", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await res.json();
+
+    if (result.visualize && result.graphData?.length) {
+      setGraphData(result.graphData);
+    } else {
+      setGraphData(null);
     }
 
-    try {
-      const res = await fetch("http://localhost:5000/api/benchmark", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await res.json();
-
-      if (result.visualize && result.graphData?.length) {
-        setGraphData(result.graphData);
-      } else {
-        setGraphData(null);
-      }
-
-      setRawData(result.data || []);
-    } catch (err) {
-      console.error("Error running benchmark:", err);
-    }
-  };
+    setRawData(result.data || []);
+  } catch (err) {
+    console.error("Error running benchmark:", err);
+  }
+};
 
   const chartData = {
     labels: graphData?.map(d => `${d.runtime} (${d.memory}MB)`),
@@ -181,7 +183,7 @@ const BenchmarkForm = () => {
           <h3>Benchmark Table</h3>
           <table>
             <thead>
-              <tr><th>Runtime</th><th>Memory</th><th>Region</th><th>Cold Start Time</th></tr>
+              <tr><th>Runtime</th><th>Memory</th><th>Region</th><th>Artifact Type</th><th>Cold Start Time</th></tr>
             </thead>
             <tbody>
               {rawData.map((item, index) => (
@@ -189,6 +191,7 @@ const BenchmarkForm = () => {
                   <td>{item.runtime}</td>
                   <td>{item.memory} MB</td>
                   <td>{item.region}</td>
+                  <td>{item.artifactType || "-"}</td>
                   <td>{item.coldStartTime}</td>
                 </tr>
               ))}
@@ -207,10 +210,10 @@ const BenchmarkForm = () => {
         <div style={{ marginTop: "2rem" }}>
           <h3>CSV Output</h3>
           <pre>
-            Runtime,Memory,Region,Cold Start Time
+            Runtime,Memory,Region,Artifact Type,Cold Start Time
             {"\n"}
             {rawData.map(
-              (item) => `${item.runtime},${item.memory},${item.region},${item.coldStartTime}`
+              (item) => `${item.runtime},${item.memory},${item.region},${item.artifactType || "-"},${item.coldStartTime}`
             ).join("\n")}
           </pre>
         </div>
